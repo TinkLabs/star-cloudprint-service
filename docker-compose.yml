@@ -1,0 +1,21 @@
+version: '3'
+services:
+  node:
+    container_name: star-cloudprint-service
+    image: "justsml/docker-phantom-node:latest"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app
+    env_file: .env
+    working_dir: /app
+    command: ["npm", "run", "dev"]
+  redis:
+    container_name: star-cloudprint-service-redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - .data:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
