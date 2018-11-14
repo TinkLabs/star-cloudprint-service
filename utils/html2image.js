@@ -20,7 +20,7 @@ export default async function html2image(html) {
     const to = path.join(__dirname, '..', 'tmp', `${id}.jpg`);
 
     await fsWriteFile(from, html, 'utf8');
-    await cmdGet(`phantomjs --disk-cache=true --max-disk-cache-size=204800 ${script} ${from} ${to}`);
+    await cmdGet(`phantomjs --disk-cache=true ${script} ${from} ${to}`);
 
     const image = await fsReadFile(to);
 
