@@ -11,9 +11,8 @@ router.use(wrapAsync(async function (req, res, next) {
     const mac = req.body.printerMAC || req.query.mac;
 
     if (mac) {
-        res.locals.mac = mac.toLowerCase();
-
-        await redis.setAsync(`${res.locals.mac}.alive`, 1, 'EX', 10);
+        res.locals.mac = mac.toUpperCase();
+        await redis.setAsync(`printer.alive.${res.locals.mac}`, 1, 'EX', 10);
     }
 
     next();
@@ -23,7 +22,7 @@ router.use(wrapAsync(async function (req, res, next) {
 // POST /server
 router.post('/', wrapAsync(async function (req, res) {
     if (res.locals.mac) {
-        const jobs = await redis.lrangeAsync(`${res.locals.mac}.jobs`, 0, 0);
+        const jobs = await redis.lrangeAsync(`printer.jobs.${res.locals.mac}`, 0, 0);
 
         if (jobs && jobs.length) {
             return res.json({
@@ -42,7 +41,7 @@ router.post('/', wrapAsync(async function (req, res) {
 // GET /server
 router.get('/', wrapAsync(async function (req, res) {
     if (res.locals.mac) {
-        const jobs = await redis.lrangeAsync(`${res.locals.mac}.jobs`, 0, 0);
+        const jobs = await redis.lrangeAsync(`printer.jobs.${res.locals.mac}`, 0, 0);
 
         if (jobs && jobs.length) {
             const contentBase64 = jobs[0];
@@ -59,7 +58,7 @@ router.get('/', wrapAsync(async function (req, res) {
 // DELETE /server
 router.delete('/', wrapAsync(async function (req, res) {
     if (res.locals.mac) {
-        await redis.lpop(`${res.locals.mac}.jobs`);
+        await redis.lpop(`printer.jobs.${res.locals.mac}`);
     }
 
     res.send('Done!');

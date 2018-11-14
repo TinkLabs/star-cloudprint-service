@@ -13,7 +13,7 @@ const fsUnlink = util.promisify(fs.unlink);
 const cmdGet = Promise.promisify(cmd.get, {multiArgs: true, context: cmd});
 
 
-export default async function (html) {
+export default async function html2image(html) {
     const id = uniqueId(now() + '-');
     const script = path.join(__dirname, '..', 'scripts', 'html2image.js');
     const from = path.join(__dirname, '..', 'tmp', `${id}.html`);

@@ -13,6 +13,7 @@ axios
         @import url(https://fonts.googleapis.com/earlyaccess/notosanssc.css);
         @import url(https://fonts.googleapis.com/earlyaccess/notosansjp.css);
         @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+        
         body {
             width: 576px;
             padding: 10px;
@@ -21,7 +22,6 @@ axios
             color: #000000;
             font-family: 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
             font-size: 28px;
-            font-weight: 600;
             background-color: #FFFFFF;
         }
 
@@ -39,7 +39,6 @@ axios
 <body>
 <p class="center">Handy</p>
 <p class="right">Apple</p>
-<p class="right">Banner</p>
 <p class="right">にっぽんご/にほんご</p>
 <p class="right">日本僑民亦有相當多人識講日文</p>
 <p class="right">佢哋嘅</p>
