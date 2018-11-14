@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm install && nodemon app.js",
-    "start": "npm install && babel-node app.js",
-    "test": "babel-node test.js",
-    "dl": "babel-node dl.js"
+    "start": "babel-node app.js",
+    "test": "babel-node test.js"
   },
   "author": "",
   "license": "ISC",

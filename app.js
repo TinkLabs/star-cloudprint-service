@@ -17,6 +17,9 @@ app.use(bodyParser.json());
 app.use('/server', serverRoutes);
 app.use('/', routes);
 
+// aws health check
+app.use('/health', (req, res) => res.send('success'));
+
 // handle API error
 // app.use(errorHandler);
 
