@@ -24,7 +24,7 @@ export default async function html2image(html) {
 
     const image = await fsReadFile(to);
 
-    await fsUnlink(from);
+    //await fsUnlink(from);
     await fsUnlink(to);
 
     return image;
