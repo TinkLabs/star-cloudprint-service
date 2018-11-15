@@ -1,6 +1,5 @@
 import express from 'express';
 import wrapAsync from 'express-wrap-async';
-import Promise from 'bluebird';
 import {zipObject} from 'lodash/array';
 import redis from '../database/redis';
 import html2image from '../utils/html2image';
@@ -24,12 +23,15 @@ router.use(wrapAsync(async function (req, res, next) {
 // GET /check
 router.get('/check', wrapAsync(async function (req, res) {
     if (res.locals.mac) {
+        let results = {};
+
+        for (let i = 0; i < res.locals.mac.length; i++) {
+            results[res.locals.mac[i]] = await redis.existsAsync(`printer.alive.${res.locals.mac[i].toUpperCase()}`);
+        }
+
         return res.json({
             success: true,
-            results: zipObject(
-                res.locals.mac,
-                await Promise.map(res.locals.mac, async (mac) => !!(await redis.getAsync(`printer.alive.${mac.toUpperCase()}`))),
-            ),
+            results,
         });
     }
 
@@ -42,10 +44,15 @@ router.get('/check', wrapAsync(async function (req, res) {
 // POST /print
 router.post('/print', wrapAsync(async function (req, res) {
     if (res.locals.mac && req.body.html) {
+        const number = parseInt(req.body.number) || 1;
         const contentBuffer = await html2image(req.body.html);
         const contentBase64 = Buffer.from(contentBuffer, 'binary').toString('base64');
 
-        await Promise.map(res.locals.mac, (mac) => redis.rpushAsync(`printer.jobs.${mac.toUpperCase()}`, contentBase64));
+        for (let i = 0; i < res.locals.mac.length; i++) {
+            for (let y = 0; y < number; y++) {
+                await redis.rpushAsync(`printer.jobs.${res.locals.mac[i].toUpperCase()}`, contentBase64);
+            }
+        }
 
         return res.json({
             success: true,

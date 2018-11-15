@@ -19,3 +19,8 @@ services:
       - .data:/data
     entrypoint: redis-server --appendonly yes
     restart: always
+
+networks:
+  default:
+    external:
+      name: backend2_default
