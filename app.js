@@ -1,5 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import serverRoutes from './routes/server';
 import routes from './routes';
@@ -10,6 +11,7 @@ const app = express();
 
 // middleware
 app.use(logger('dev'));
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
