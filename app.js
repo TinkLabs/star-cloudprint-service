@@ -24,11 +24,5 @@ app.use('/', routes);
 // aws health check
 app.use('/health', (req, res) => res.send('success'));
 
-// handle API error
-// app.use(errorHandler);
-
-// aws health check
-app.use('/health', (req, res) => res.send('success'));
-
 // listen
 app.listen(port, () => console.log('Server is starting!'));
