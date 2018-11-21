@@ -1,5 +1,5 @@
 import express from 'express';
-import logger from 'morgan';
+import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import serverRoutes from './routes/server';
@@ -10,7 +10,9 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 // middleware
-app.use(logger('dev'));
+app.use(morgan('dev', {
+    skip: (req) => req.originalUrl.startsWith('/health'),
+}));
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
