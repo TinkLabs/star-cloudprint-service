@@ -11,7 +11,17 @@ const app = express();
 
 // middleware
 app.use(morgan('dev', {
-    skip: (req) => req.originalUrl.startsWith('/health'),
+    skip: (req) => {
+        if (req.originalUrl.startsWith('/health')) {
+            return true;
+        }
+
+        if (req.method === 'POST' && req.originalUrl.startsWith('/server')) {
+            return true;
+        }
+
+        return false;
+    }
 }));
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
