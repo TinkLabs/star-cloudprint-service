@@ -5,9 +5,9 @@ import Promise from 'bluebird';
 import {now} from 'lodash/date';
 import {uniqueId} from 'lodash/util';
 import cmd from 'node-cmd';
+import sharp from 'sharp';
 
 
-const fsReadFile = util.promisify(fs.readFile);
 const fsWriteFile = util.promisify(fs.writeFile);
 const fsUnlink = util.promisify(fs.unlink);
 const cmdGet = Promise.promisify(cmd.get, {multiArgs: true, context: cmd});
@@ -22,7 +22,10 @@ export default async function html2image(html) {
     await fsWriteFile(from, html, 'utf8');
     await cmdGet(`phantomjs --disk-cache=true --max-disk-cache-size=${200*1024} ${script} ${from} ${to}`);
 
-    const image = await fsReadFile(to);
+    const image = await sharp(to)
+        .resize({width: 576, fit: 'contain'})
+        .jpeg()
+        .toBuffer();
 
     await fsUnlink(from);
     await fsUnlink(to);
